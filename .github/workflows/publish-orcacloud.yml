@@ -24,7 +24,7 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           changelog="$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH" | head -c 4000)"
           metadata="$(jq -cn --arg version "$version" --arg changelog "$changelog"             '{version: $version} + (if $changelog == "" then {} else {changelog: $changelog} end)')"
-          args=(-F "metadata=$metadata")
+          args=(--form-string "metadata=$metadata")
           shopt -s nullglob
           for file in $PLUGIN_FILES; do
             args+=(-F "files=@$file")
